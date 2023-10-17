@@ -5,7 +5,8 @@ import me.seongim.jpabook.domain.*;
 import me.seongim.jpabook.domain.item.Item;
 import me.seongim.jpabook.repository.ItemRepository;
 import me.seongim.jpabook.repository.MemberRepository;
-import me.seongim.jpabook.repository.OrderRepository;
+import me.seongim.jpabook.repository.order.OrderRepository;
+import me.seongim.jpabook.repository.order.OrderSearch;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,6 +62,6 @@ public class OrderService {
      * 주문 조회
      */
     public List<Order> finsOrders(OrderSearch orderSearch) {
-        return orderRepository.findAll(orderSearch);
+        return orderRepository.findAllByString(orderSearch);
     }
 }

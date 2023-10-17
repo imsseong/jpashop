@@ -1,10 +1,9 @@
-package me.seongim.jpabook.repository;
+package me.seongim.jpabook.repository.order;
 
-import javafx.beans.binding.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import me.seongim.jpabook.domain.Order;
-import me.seongim.jpabook.domain.OrderSearch;
-import me.seongim.jpabook.domain.OrderStatus;
+import me.seongim.jpabook.repository.order.OrderSearch;
+import me.seongim.jpabook.repository.order.OrderSimpleQueryDto;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -26,7 +25,7 @@ public class OrderRepository {
         return em.find(Order.class, id);
     }
 
-    public List<Order> findAll(OrderSearch orderSearch) {
+    public List<Order> findAllByString(OrderSearch orderSearch) {
         //language=JPAQL
         String jpql = "select o From Order o join o.member m";
         boolean isFirstCondition = true;
@@ -90,6 +89,16 @@ public class OrderRepository {
 
          */
     }
+
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class
+        ).getResultList();
+    }
+
+
 
     /*
     private BooleanExpression statisEq(OrderStatus statusCond) {

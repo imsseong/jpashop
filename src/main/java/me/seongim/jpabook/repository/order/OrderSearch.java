@@ -1,7 +1,8 @@
-package me.seongim.jpabook.domain;
+package me.seongim.jpabook.repository.order;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.seongim.jpabook.domain.OrderStatus;
 
 @Getter @Setter
 public class OrderSearch {

@@ -7,7 +7,7 @@ import me.seongim.jpabook.domain.OrderStatus;
 import me.seongim.jpabook.domain.item.Book;
 import me.seongim.jpabook.domain.item.Item;
 import me.seongim.jpabook.exception.NotEnoughStockException;
-import me.seongim.jpabook.repository.OrderRepository;
+import me.seongim.jpabook.repository.order.OrderRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
