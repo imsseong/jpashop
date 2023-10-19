@@ -1,7 +1,12 @@
 package me.seongim.jpabook.repository.order;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.seongim.jpabook.domain.Order;
+import me.seongim.jpabook.domain.OrderStatus;
+import me.seongim.jpabook.domain.QMember;
+import me.seongim.jpabook.domain.QOrder;
 import me.seongim.jpabook.repository.order.OrderSearch;
 import me.seongim.jpabook.repository.order.OrderSimpleQueryDto;
 import org.springframework.stereotype.Repository;
@@ -120,20 +125,32 @@ public class OrderRepository {
                 .getResultList();
     }
 
-    /*
-    private BooleanExpression statisEq(OrderStatus statusCond) {
+    public List<Order> findAll(OrderSearch orderSearch) {
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+
+        JPAQueryFactory query = new JPAQueryFactory(em);
+        return query
+                .select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
+                .limit(1000)
+                .fetch();
+    }
+
+    private BooleanExpression statusEq(OrderStatus statusCond) {
         if (statusCond == null) {
             return null;
         }
-        return order.status.eq(statusCond);
+        return QOrder.order.status.eq(statusCond);
     }
 
     private BooleanExpression nameLike(String nameCond) {
         if (!StringUtils.hasText(nameCond)) {
             return null;
         }
-        return member.name.like(nameCond);
+        return QMember.member.name.like(nameCond);
     }
 
-     */
 }
