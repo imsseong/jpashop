@@ -1,10 +1,9 @@
 package me.seongim.jpabook.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import me.seongim.jpabook.domain.Member;
 import me.seongim.jpabook.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import me.seongim.jpabook.repository.MemberRepositoryOld;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,12 +50,12 @@ public class MemberService {
      * 회원 단건 조회
      */
     public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).get();
     }
 
     @Transactional
     public void update(Long id, String name) {
-        Member member = memberRepository.findOne(id);
+        Member member = memberRepository.findById(id).get();
         member.setName(name);
     }
 }

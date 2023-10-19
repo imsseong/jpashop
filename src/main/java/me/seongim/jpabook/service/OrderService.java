@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.seongim.jpabook.domain.*;
 import me.seongim.jpabook.domain.item.Item;
 import me.seongim.jpabook.repository.ItemRepository;
-import me.seongim.jpabook.repository.MemberRepository;
+import me.seongim.jpabook.repository.MemberRepositoryOld;
 import me.seongim.jpabook.repository.order.OrderRepository;
 import me.seongim.jpabook.repository.order.OrderSearch;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryOld memberRepositoryOld;
     private final ItemRepository itemRepository;
 
     /**
@@ -28,7 +28,7 @@ public class OrderService {
     public Long order(Long memberId, Long itemId, int count) {
 
         //엔티티 조회
-        Member member = memberRepository.findOne(memberId);
+        Member member = memberRepositoryOld.findOne(memberId);
         Item item = itemRepository.findOne(itemId);
 
         //배송정보 생성
