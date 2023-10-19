@@ -93,12 +93,32 @@ public class OrderRepository {
     public List<Order> findAllWithMemberDelivery() {
         return em.createQuery(
                 "select o from Order o" +
-                        " join fetch o.member m" +
+                         " join fetch o.member m" +
                         " join fetch o.delivery d", Order.class
         ).getResultList();
     }
 
+    //distinct: SQL distinct 추가 + 같은 엔티티 중복 제거
+    //컬렉션페치조인 단점: 페이징 불가능
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join getch oi.item i", Order.class
+        ).getResultList();
+    }
 
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 
     /*
     private BooleanExpression statisEq(OrderStatus statusCond) {
