@@ -22,7 +22,7 @@ public class OrderDto {
 
     public OrderDto(Order order) {
         orderId = order.getId();
-        name = order.getMember().getName();
+        name = order.getMemberJ().getName();
         orderDate = order.getOrderDate();
         orderStatus = order.getStatus();
         address = order.getDelivery().getAddress();

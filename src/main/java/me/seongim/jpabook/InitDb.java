@@ -28,11 +28,11 @@ public class InitDb {
 
         private final EntityManager em;
 
-        public Member createMember(String name, String city, String streat, String zipcode) {
-            Member member = new Member();
-            member.setName(name);
-            member.setAddress(new Address(city, streat, zipcode));
-            return member;
+        public MemberJ createMember(String name, String city, String streat, String zipcode) {
+            MemberJ memberJ = new MemberJ();
+            memberJ.setName(name);
+            memberJ.setAddress(new Address(city, streat, zipcode));
+            return memberJ;
         }
 
         public Book createBook(String name, int price, int stockQuantity) {
@@ -49,8 +49,8 @@ public class InitDb {
             return delivery;
         }
         public void dbInit1() {
-            Member member = createMember("userA", "서울", "1", "1111");
-            em.persist(member);
+            MemberJ memberJ = createMember("userA", "서울", "1", "1111");
+            em.persist(memberJ);
 
             Book book1 = createBook("JPA1 BOOK", 10000, 100);
             em.persist(book1);
@@ -61,14 +61,14 @@ public class InitDb {
             OrderItem orderItem1 = OrderItem.createOrderItem(book1, 10000, 1);
             OrderItem orderItem2 = OrderItem.createOrderItem(book2, 20000, 2);
 
-            Delivery delivery = createDelivery(member.getAddress());
-            Order order = Order.createOrder(member, delivery, orderItem1, orderItem2);
+            Delivery delivery = createDelivery(memberJ.getAddress());
+            Order order = Order.createOrder(memberJ, delivery, orderItem1, orderItem2);
             em.persist(order);
         }
 
         public void dbInit2() {
-            Member member = createMember("userB", "부산", "2", "2222");
-            em.persist(member);
+            MemberJ memberJ = createMember("userB", "부산", "2", "2222");
+            em.persist(memberJ);
 
             Book book1 = createBook("SPRING1 BOOK", 20000, 200);
             em.persist(book1);
@@ -79,8 +79,8 @@ public class InitDb {
             OrderItem orderItem1 = OrderItem.createOrderItem(book1, 20000, 3);
             OrderItem orderItem2 = OrderItem.createOrderItem(book2, 40000, 4);
 
-            Delivery delivery = createDelivery(member.getAddress());
-            Order order = Order.createOrder(member, delivery, orderItem1, orderItem2);
+            Delivery delivery = createDelivery(memberJ.getAddress());
+            Order order = Order.createOrder(memberJ, delivery, orderItem1, orderItem2);
             em.persist(order);
         }
     }

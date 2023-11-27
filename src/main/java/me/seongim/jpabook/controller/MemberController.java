@@ -1,47 +1,36 @@
 package me.seongim.jpabook.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.seongim.jpabook.domain.Address;
-import me.seongim.jpabook.domain.Member;
-import me.seongim.jpabook.service.MemberService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import me.seongim.jpabook.dto.MemberSearchCondition;
+import me.seongim.jpabook.dto.MemberTeamDto;
+import me.seongim.jpabook.repository.MemberJpaRepository;
+import me.seongim.jpabook.repository.MemberRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class MemberController {
-    private final MemberService memberService;
 
-    @GetMapping(value = "/members/new")
-    public String createForm(Model model) {
-        model.addAttribute("memberForm", new MemberForm());
-        return "members/createMemberForm";
+    private final MemberJpaRepository memberJpaRepository;
+    private final MemberRepository memberRepository;
+
+    @GetMapping("/v1/members")
+    public List<MemberTeamDto> searchMemberV1(MemberSearchCondition condition) {
+        return memberJpaRepository.search(condition);
     }
 
-    @PostMapping(value = "/members/new")
-    public String create(@Valid MemberForm form, BindingResult result) {
-        if (result.hasErrors()) {
-            return "members/createMemberForm";
-        }
-        Address address = new Address(form.getCity(), form.getStreet(),
-                form.getZipcode());
-        Member member = new Member();
-        member.setName(form.getName());
-        member.setAddress(address);
-        memberService.join(member);
-        return "redirect:/";
+    @GetMapping("/v2/members")
+    public Page<MemberTeamDto> searchMemberV2(MemberSearchCondition condition, Pageable pageable) {
+        return memberRepository.searchPageSimple(condition, pageable);
     }
 
-    //추가
-    @GetMapping(value = "/members") public String list(Model model) {
-        List<Member> members = memberService.findMembers();
-        model.addAttribute("members", members);
-        return "members/memberList";
+    @GetMapping("/v3/members")
+    public Page<MemberTeamDto> searchMemberV3(MemberSearchCondition condition, Pageable pageable) {
+        return memberRepository.searchPageComplex(condition, pageable);
     }
 }

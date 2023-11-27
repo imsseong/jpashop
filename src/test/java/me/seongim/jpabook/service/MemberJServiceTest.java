@@ -1,52 +1,50 @@
 package me.seongim.jpabook.service;
 
-import me.seongim.jpabook.domain.Member;
-import me.seongim.jpabook.repository.MemberRepositoryOld;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import me.seongim.jpabook.domain.MemberJ;
+import me.seongim.jpabook.repository.MemberJRepositoryOld;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Fail.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional //test클래스에서 test가 끝나면 rollback
-public class MemberServiceTest {
+public class MemberJServiceTest {
 
     @Autowired
     MemberService memberService;
     @Autowired
-    MemberRepositoryOld memberRepositoryOld;
+    MemberJRepositoryOld memberJRepositoryOld;
 
     @Test
     //@Rollback(false)
     public void 회원가입() throws Exception {
         //given
-        Member member = new Member();
-        member.setName("seongim");
+        MemberJ memberJ = new MemberJ();
+        memberJ.setName("seongim");
 
         //when
-        Long saveId = memberService.join(member);
+        Long saveId = memberService.join(memberJ);
 
         //then
-        assertEquals(member, memberRepositoryOld.findOne(saveId));
+        assertEquals(memberJ, memberJRepositoryOld.findOne(saveId));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void 중복_회원_예외() throws Exception {
         //given
-        Member member1 = new Member();
-        member1.setName("seongim");
+        MemberJ memberJ1 = new MemberJ();
+        memberJ1.setName("seongim");
 
-        Member member2 = new Member();
-        member2.setName("seongim");
+        MemberJ memberJ2 = new MemberJ();
+        memberJ2.setName("seongim");
 
         //when
-        memberService.join(member1);
-        memberService.join(member2); //예외가 발생해야 한다.
+        memberService.join(memberJ1);
+        memberService.join(memberJ2); //예외가 발생해야 한다.
         /*
         //expected = IllegalStateException.class로 대체 가
         try {

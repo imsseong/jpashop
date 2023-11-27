@@ -1,9 +1,8 @@
 package me.seongim.jpabook.service;
 
 import lombok.RequiredArgsConstructor;
-import me.seongim.jpabook.domain.Member;
-import me.seongim.jpabook.repository.MemberRepository;
-import me.seongim.jpabook.repository.MemberRepositoryOld;
+import me.seongim.jpabook.domain.MemberJ;
+import me.seongim.jpabook.repository.MemberJRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor //final있는 필드만 가지고 생성자 만들어
 public class MemberService {
 
-    private final MemberRepository memberRepository;
+    private final MemberJRepository memberJRepository;
 
     /*
     //@Autowired //생성자 하나면 자동으로 injection -> @RequiredArgsConstructor가 대신 해줌
@@ -26,15 +25,15 @@ public class MemberService {
      * 회원 가입
      */
     @Transactional
-    public Long join(Member member) {
-        validateDuplicateMember(member); //중복 회원 검증
-        memberRepository.save(member);
-        return member.getId();
+    public Long join(MemberJ memberJ) {
+        validateDuplicateMember(memberJ); //중복 회원 검증
+        memberJRepository.save(memberJ);
+        return memberJ.getId();
     }
 
-    private void validateDuplicateMember(Member member) {
-        List<Member> findMembers = memberRepository.findByName(member.getName());
-        if (!findMembers.isEmpty()) {
+    private void validateDuplicateMember(MemberJ memberJ) {
+        List<MemberJ> findMemberJS = memberJRepository.findByName(memberJ.getName());
+        if (!findMemberJS.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }
@@ -42,20 +41,20 @@ public class MemberService {
     /**
      * 회원 전체 조회
      */
-    public List<Member> findMembers() {
-        return memberRepository.findAll();
+    public List<MemberJ> findMembers() {
+        return memberJRepository.findAll();
     }
 
     /**
      * 회원 단건 조회
      */
-    public Member findOne(Long memberId) {
-        return memberRepository.findById(memberId).get();
+    public MemberJ findOne(Long memberId) {
+        return memberJRepository.findById(memberId).get();
     }
 
     @Transactional
     public void update(Long id, String name) {
-        Member member = memberRepository.findById(id).get();
-        member.setName(name);
+        MemberJ memberJ = memberJRepository.findById(id).get();
+        memberJ.setName(name);
     }
 }

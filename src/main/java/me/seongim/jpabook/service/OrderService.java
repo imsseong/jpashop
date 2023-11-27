@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.seongim.jpabook.domain.*;
 import me.seongim.jpabook.domain.item.Item;
 import me.seongim.jpabook.repository.ItemRepository;
-import me.seongim.jpabook.repository.MemberRepositoryOld;
+import me.seongim.jpabook.repository.MemberJRepositoryOld;
 import me.seongim.jpabook.repository.order.OrderRepository;
 import me.seongim.jpabook.repository.order.OrderSearch;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final MemberRepositoryOld memberRepositoryOld;
+    private final MemberJRepositoryOld memberJRepositoryOld;
     private final ItemRepository itemRepository;
 
     /**
@@ -28,18 +28,18 @@ public class OrderService {
     public Long order(Long memberId, Long itemId, int count) {
 
         //엔티티 조회
-        Member member = memberRepositoryOld.findOne(memberId);
+        MemberJ memberJ = memberJRepositoryOld.findOne(memberId);
         Item item = itemRepository.findOne(itemId);
 
         //배송정보 생성
         Delivery delivery = new Delivery();
-        delivery.setAddress(member.getAddress());
+        delivery.setAddress(memberJ.getAddress());
 
         //주문상품 생성
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
 
         //주문 생성
-        Order order = Order.createOrder(member, delivery, orderItem);
+        Order order = Order.createOrder(memberJ, delivery, orderItem);
 
         //주문 저장
         orderRepository.save(order); //CascadeType.ALL 옵션으로 order가 persist될 때 orderItem, delivery도 함께 persist

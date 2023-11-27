@@ -11,10 +11,10 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-public class Member {
+public class MemberJ {
 
     @Id @GeneratedValue
-    @Column(name = "member_id")
+    @Column(name = "memberJ_id")
     private Long id;
 
     @NotEmpty
@@ -24,6 +24,6 @@ public class Member {
     private Address address;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "member") //member와 order는 1:다, 매핑 되는 것 읽기 전용
+    @OneToMany(mappedBy = "memberJ") //member와 order는 1:다, 매핑 되는 것 읽기 전용
     private List<Order> orders = new ArrayList<>();
 }

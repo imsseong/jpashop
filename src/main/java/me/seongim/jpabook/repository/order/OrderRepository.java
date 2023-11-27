@@ -5,10 +5,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.seongim.jpabook.domain.Order;
 import me.seongim.jpabook.domain.OrderStatus;
-import me.seongim.jpabook.domain.QMember;
+import me.seongim.jpabook.domain.QMemberJ;
 import me.seongim.jpabook.domain.QOrder;
-import me.seongim.jpabook.repository.order.OrderSearch;
-import me.seongim.jpabook.repository.order.OrderSimpleQueryDto;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -32,7 +30,7 @@ public class OrderRepository {
 
     public List<Order> findAllByString(OrderSearch orderSearch) {
         //language=JPAQL
-        String jpql = "select o From Order o join o.member m";
+        String jpql = "select o From Order o join o.memberJ m";
         boolean isFirstCondition = true;
 
         //주문 상태 검색
@@ -98,7 +96,7 @@ public class OrderRepository {
     public List<Order> findAllWithMemberDelivery() {
         return em.createQuery(
                 "select o from Order o" +
-                         " join fetch o.member m" +
+                         " join fetch o.memberJ m" +
                         " join fetch o.delivery d", Order.class
         ).getResultList();
     }
@@ -108,17 +106,17 @@ public class OrderRepository {
     public List<Order> findAllWithItem() {
         return em.createQuery(
                 "select distinct o from Order o" +
-                        " join fetch o.member m" +
+                        " join fetch o.memberJ m" +
                         " join fetch o.delivery d" +
                         " join fetch o.orderItems oi" +
-                        " join getch oi.item i", Order.class
+                        " join fetch oi.item i", Order.class
         ).getResultList();
     }
 
     public List<Order> findAllWithMemberDelivery(int offset, int limit) {
         return em.createQuery(
                 "select o from Order o" +
-                        " join fetch o.member m" +
+                        " join fetch o.memberJ m" +
                         " join fetch o.delivery d", Order.class)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
@@ -127,13 +125,13 @@ public class OrderRepository {
 
     public List<Order> findAll(OrderSearch orderSearch) {
         QOrder order = QOrder.order;
-        QMember member = QMember.member;
+        QMemberJ member = QMemberJ.memberJ;
 
         JPAQueryFactory query = new JPAQueryFactory(em);
         return query
                 .select(order)
                 .from(order)
-                .join(order.member, member)
+                .join(order.memberJ, member)
                 .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
                 .limit(1000)
                 .fetch();
@@ -150,7 +148,7 @@ public class OrderRepository {
         if (!StringUtils.hasText(nameCond)) {
             return null;
         }
-        return QMember.member.name.like(nameCond);
+        return QMemberJ.memberJ.name.like(nameCond);
     }
 
 }

@@ -26,7 +26,7 @@ public class OrderSimpleApiController {
     public List<Order> ordersV1() {
         List<Order> all = orderRepository.findAllByString(new OrderSearch());
         for (Order order : all) {
-            order.getMember().getName(); //Lazy 강제 초기화
+            order.getMemberJ().getName(); //Lazy 강제 초기화
             order.getDelivery().getAddress(); //Lazy 강제 초기화
         }
         return all;
@@ -61,7 +61,7 @@ public class OrderSimpleApiController {
 
         public SimpleOrderDto(Order order) {
             orderId = order.getId();
-            name = order.getMember().getName(); //Lazy 초기화
+            name = order.getMemberJ().getName(); //Lazy 초기화
             orderDate = order.getOrderDate();
             orderStatus = order.getStatus();
             address = order.getDelivery().getAddress(); //Lazy 초기화
